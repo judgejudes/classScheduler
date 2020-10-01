@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
-import Course from './Course';
 import TermSelector from './TermSelector';
+import CourseSelector from './CourseSelector';
 
 //creating object to map letters to terms, then making list of term names to make buttons with
 const termMap = { F: 'Fall', W: 'Winter', S: 'Spring' };
@@ -21,9 +21,7 @@ const CourseList = ({ courses }) => {
     <ScrollView>
       {/* passing selected term as a property to term selector */}
       <TermSelector selectedTerm = {selectedTerm} setSelectedTerm={setSelectedTerm}/>
-      <View style={styles.courseList}>
-        { termCourses.map(course => <Course key={course.id} course={course} />) }
-        </View>
+        <CourseSelector courses={termCourses} />
     </ScrollView>
   );
 };
