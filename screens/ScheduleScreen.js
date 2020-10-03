@@ -8,9 +8,13 @@ const Banner = ({ title }) => ( //title is part of parameter list
 
 // App is a component (function that when called returns piece of UI,
 //which is the View component to hold UI elements and Text component to hold text
-const ScheduleScreen = () => {
+const ScheduleScreen = ({navigation}) => {
   //initial course schedule object; initial value is object with empty title and empty list of courses
   const [schedule, setSchedule] = useState({ title: '', courses: [] });
+
+  const view = (course) => {
+      navigation.navigate('CourseDetailScreen', { course });
+  };
 
   const url = 'https://courses.cs.northwestern.edu/394/data/cs-courses.php';
 
@@ -27,8 +31,8 @@ const ScheduleScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Banner title={schedule.title} />
-      <CourseList courses={schedule.courses} />
+      <Banner title={schedule.title} error={schedule.error}/>
+      <CourseList courses={schedule.courses} view={view} />
     </SafeAreaView>
   );
 }

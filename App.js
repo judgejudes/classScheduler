@@ -3,6 +3,7 @@ import React from 'react';
 import { NavigationContainer, StackActions } from '@react-navigation/native'; //container component managing screen interactions
 import { createStackNavigator } from '@react-navigation/stack';
 import ScheduleScreen from './screens/ScheduleScreen';
+import CourseDetailScreen from './screens/CourseDetailScreen';
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,10 @@ const App = () => {
         <Stack.Screen name="ScheduleScreen"
           component={ScheduleScreen}
           options={{ title: 'Schedule' }}
+        />
+        <Stack.Screen name="CourseDetailScreen"
+          component={CourseDetailScreen}
+          options={{ title: 'Course detail' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

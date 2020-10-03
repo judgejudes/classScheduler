@@ -5,7 +5,7 @@ import Course from './Course';
 // manages list of selected courses
 
 
-const CourseSelector = ({courses}) => {
+const CourseSelector = ({courses, view}) => {
     // state variable for list of currently selected courses
     const [selected, setSelected] = useState([]);
 
@@ -21,6 +21,7 @@ const CourseSelector = ({courses}) => {
                     isDisabled={hasConflict(course, selected)}
                     isSelected={selected.includes(course)}
                     select={toggle}
+                    view={view}
                     />
                 ))
             }
