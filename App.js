@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import ScheduleScreen from './screens/ScheduleScreen';
 import CourseDetailScreen from './screens/CourseDetailScreen';
 import UserContext from './UserContext';
+import CourseEditScreen from './screens/CourseEditScreen';
 
 const Stack = createStackNavigator();
 
@@ -27,7 +28,7 @@ const App = () => {
             options={{ title: 'Course Detail' }}
           />
           <Stack.Screen name="CourseEditScreen"
-            component={CourseDetailScreen}
+            component={CourseEditScreen}
             options={{ title: 'Course Editor' }}
           />
         </Stack.Navigator>
