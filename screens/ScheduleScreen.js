@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, Text } from 'react-native';
 import CourseList from '../components/CourseList';
+import UserContext from '../UserContext';
 
 const Banner = ({ title }) => ( //title is part of parameter list
   <Text style={styles.bannerStyle}>{title || '[loading...]'}</Text>
 );
 
-// App is a component (function that when called returns piece of UI,
-//which is the View component to hold UI elements and Text component to hold text
 const ScheduleScreen = ({navigation}) => {
   //initial course schedule object; initial value is object with empty title and empty list of courses
+  // const user = useContext(UserContext); //can get data stored in user context
+
   const [schedule, setSchedule] = useState({ title: '', courses: [] });
+    const user = useContext(UserContext);
+    const canEdit = user && user.role === 'admin';
 
   const view = (course) => {
-      navigation.navigate('CourseDetailScreen', { course });
+      navigation.navigate(canEdit ? 'CourseEditScreen' : 'CourseDetailScreen', { course });
   };
 
   const url = 'https://courses.cs.northwestern.edu/394/data/cs-courses.php';
