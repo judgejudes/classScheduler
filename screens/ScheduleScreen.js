@@ -2,10 +2,16 @@ import React, { useContext, useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, Text } from 'react-native';
 import CourseList from '../components/CourseList';
 import UserContext from '../UserContext';
+import { firebase } from '../firebase.js';
 
 const Banner = ({ title }) => ( //title is part of parameter list
   <Text style={styles.bannerStyle}>{title || '[loading...]'}</Text>
 );
+
+const fixCourses = (json) => ({
+  ...json,
+  courses: Object.values(json.courses)
+});
 
 const ScheduleScreen = ({navigation}) => {
   //initial course schedule object; initial value is object with empty title and empty list of courses
@@ -23,14 +29,13 @@ const ScheduleScreen = ({navigation}) => {
 
   //get schedule JSON data, and store using setSchedule() created by useState()
   useEffect(() => {
-    const fetchSchedule = async () => {
-      const response = await fetch(url);
-      if (!response.ok) throw response;
-      const json = await response.json();
-      setSchedule(json);
+    const db = firebase.database().ref();
+    const handleData = snap => {
+      if (snap.val()) setSchedule(fixCourses(snap.val()));
     }
-    fetchSchedule();
-  }, [])
+    db.on('value', handleData, error => alert(error));
+    return () => { db.off('value', handleData); };
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
