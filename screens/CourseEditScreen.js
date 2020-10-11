@@ -61,7 +61,7 @@ const CourseEditScreen = ({ navigation, route }) => {
                         placeholder="Introduction to Programming"
                     />
                     <Form.Button title={'Update'} />
-                    {<Form.ErrorMessage eror={submitError} visible={true} />}
+                    {<Form.ErrorMessage error={submitError} visible={true} />}
                 </Form>
             </ScrollView>
         </SafeAreaView>
