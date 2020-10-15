@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import * as Yup from 'yup';
 import Form from '../components/expo-form-starter/Form';
 import { firebase } from '../firebase';
-import { PrivateValueStore } from '@react-navigation/native';
 
 const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -14,27 +13,30 @@ const validationSchema = Yup.object().shape({
         .required()
         .min(6, 'Pasword must have at least 6 characters')
         .label('Password'),
-    confirm: Yup.string()
-        .oneOf([Yup.ref('password'), null], 'COnfirmation password must match password'),
+    confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password'), null], 'Confirmation password must match password'),
 });
 
 const RegisterScreen = ({ navigation }) => {
+
     const [signInError, setSignInError] = useState('');
 
     async function handleOnSubmit(values) {
-        if (values.confirm) {
+        const { email, password, confirmPassword } = values;
+        if (confirmPassword) {
             firebase
-            .auth()
-            .createUserWithEmailAndPassword(values.email, values.password)
-            .catch(error => {setSignInError(error.message)});
+                .auth()
+                .createUserWithEmailAndPassword(email, password)
+                .catch((error) => { setSignInError(error.message) });
         }
         else {
-            firebase.auth().signInWithEmailAndPassword(values.email, values.password)
-            .catch(error => {setSignInError(error.message)});
+            firebase
+                .auth()
+                .signInWithEmailAndPassword(email, password)
+                .catch((error) => { setSignInError(error.message) });
         }
         navigation.navigate("ScheduleScreen");
     }
-
 
     return (
         <SafeAreaView style={styles.container}>
@@ -43,10 +45,10 @@ const RegisterScreen = ({ navigation }) => {
                     initialValues={{
                         email: '',
                         password: '',
-                        confirm: '',
+                        confirmPassword: '',
                     }}
                     validationSchema={validationSchema}
-                    onSubmit={handleOnSubmit}
+                    onSubmit={(values) => handleOnSubmit(values)}
                 >
                     <Form.Field
                         name="email"
@@ -75,8 +77,7 @@ const RegisterScreen = ({ navigation }) => {
                         keyboardType="email-address"
                         textContentType="password"
                     />
-                    {/* smtn here? */}
-                    <Form.Button title={PrivateValueStore.confirm ? 'Sign up' : 'Log in'} />
+                    <Form.Button title={(values) => (values.confirmPassword ? 'Sign up' : 'Log in')} />
                     {<Form.ErrorMessage error={signInError} visible={true} />}
                 </Form>
             </ScrollView>
@@ -85,7 +86,7 @@ const RegisterScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    
-})
+
+});
 
 export default RegisterScreen;

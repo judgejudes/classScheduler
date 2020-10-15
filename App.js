@@ -17,7 +17,7 @@ const SignInButton = ({ navigation, user }) => (
     ? <Button title="Logout" color="#448aff"
       onPress={() => firebase.auth().signOut()}
     />
-    : <Button title="SignIn" color="#448aff"
+    : <Button title="Sign In" color="#448aff"
       onPress={() => navigation.navigate('SignInScreen')}
     />
 );
@@ -29,10 +29,24 @@ const App = () => {
   const [user, setUser] = useState();
 
   useEffect(() => {
+    // console.log("hi");
     firebase.auth().onAuthStateChanged((auth) => {
       setAuth(auth);
     });
   }, []);
+
+  useEffect(() => {
+    if (auth && auth.uid) {
+      const db = firebase.database().ref('users').child(auth.uid);
+      const handleData = (snap) => {
+        setUser({ uid: auth.uid, ...snap.val() });
+      };
+      db.on('value', handleData, (error) => alert(error));
+      return () => { db.off('value', handleData); };
+    } else {
+      setUser(null);
+    }
+  }, [auth]);
 
   return (
     <UserContext.Provider value={user}>
